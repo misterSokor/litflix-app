@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-books-table
+      author: Peter Sokor
+      changes:
+        - createTable:
+            tableName: books
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: isbn
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: price
+                  type: DECIMAL(19,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+              - column:
+                  name: cover_image
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_deleted
+                  type: BIT
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
