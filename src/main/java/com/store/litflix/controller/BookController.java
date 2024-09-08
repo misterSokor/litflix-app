@@ -1,6 +1,7 @@
 package com.store.litflix.controller;
 
 import com.store.litflix.dto.BookDto;
+import com.store.litflix.dto.BookSearchParametersDto;
 import com.store.litflix.dto.CreateBookRequestDto;
 import com.store.litflix.dto.UpdateBookRequestDto;
 import com.store.litflix.service.BookService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -35,6 +37,14 @@ public class BookController extends HttpServlet {
     @GetMapping
     public List<BookDto> getAllBooks() {
         return bookService.findAll();
+    }
+
+    @GetMapping("/search")
+    public List<BookDto> searchBooks(@RequestParam(required = false) String[] title,
+                                     @RequestParam(required = false) String[] author) {
+        BookSearchParametersDto bookSearchParametersDto =
+                new BookSearchParametersDto(title, author);
+        return bookService.search(bookSearchParametersDto);
     }
 
     @PutMapping("/{id}")
