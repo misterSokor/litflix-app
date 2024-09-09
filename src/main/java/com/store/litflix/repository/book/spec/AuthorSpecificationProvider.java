@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthorSpecificationProvider implements SpecificationProvider<Book> {
-    private final String key = "author";
+    private static final String AUTHOR_COLUMN_NAME = "author";
 
     @Override
     public String getSearchKey() {
-        return key;
+        return AUTHOR_COLUMN_NAME;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class AuthorSpecificationProvider implements SpecificationProvider<Book> 
             public Predicate toPredicate(Root<Book> root,
                                          CriteriaQuery<?> query,
                                          CriteriaBuilder criteriaBuilder) {
-                return root.get(key).in(Arrays.stream(searchParameters).toArray());
+                return root.get(AUTHOR_COLUMN_NAME).in(Arrays.stream(searchParameters).toArray());
             }
         };
     }

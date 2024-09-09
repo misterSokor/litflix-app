@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
+    private static final String AUTHOR_COLUMN_NAME = "author";
+    private static final String TITLE_COLUMN_NAME = "title";
     private final SpecificationProviderManager<Book> bookSpecificationProviderManager;
 
     @Override
@@ -18,13 +20,13 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
         Specification<Book> spec = Specification.where(null);
         if (params.author() != null && params.author().length > 0) {
             spec = spec.and(bookSpecificationProviderManager
-                    .getSpecificationProvider("author")
+                    .getSpecificationProvider(AUTHOR_COLUMN_NAME)
                     .getSpecification(params.author()));
         }
 
         if (params.title() != null && params.title().length > 0) {
             spec = spec.and(bookSpecificationProviderManager
-                    .getSpecificationProvider("title")
+                    .getSpecificationProvider(TITLE_COLUMN_NAME)
                     .getSpecification(params.title()));
         }
         return spec;
