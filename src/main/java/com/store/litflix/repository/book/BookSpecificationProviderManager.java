@@ -4,6 +4,7 @@ import com.store.litflix.model.Book;
 import com.store.litflix.repository.SpecificationProvider;
 import com.store.litflix.repository.SpecificationProviderManager;
 import java.util.List;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ public class BookSpecificationProviderManager implements SpecificationProviderMa
         return bookSpecProviders.stream()
                 .filter(provider -> provider.getSearchKey().equals(key))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new NoSuchElementException(
                         "No provider found for key: " + key));
     }
 }
