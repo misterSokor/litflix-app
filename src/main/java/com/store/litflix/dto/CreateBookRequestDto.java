@@ -12,6 +12,7 @@ import org.hibernate.validator.constraints.URL;
 public class CreateBookRequestDto {
     @NotBlank
     private String title;
+    @NotBlank
     private String author;
     @ValidIsbn
     private String isbn;
