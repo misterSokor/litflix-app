@@ -6,6 +6,7 @@ import com.store.litflix.dto.CreateBookRequestDto;
 import com.store.litflix.dto.UpdateBookRequestDto;
 import com.store.litflix.service.BookService;
 import jakarta.servlet.http.HttpServlet;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +26,7 @@ public class BookController extends HttpServlet {
     private final BookService bookService;
 
     @PostMapping
-    public BookDto createBook(@RequestBody CreateBookRequestDto requestDto) {
+    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
     }
 
