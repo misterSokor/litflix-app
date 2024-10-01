@@ -30,27 +30,29 @@ public class BookController extends HttpServlet {
     private final BookService bookService;
 
     @PostMapping
-    @Operation(summary = "Create a new book", description = "create a new book")
+    @Operation(summary = "Creates a new book",
+            description = "creates a new book")
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "find book by its id", description = "find book by its id")
+    @Operation(summary = "finds book by its id",
+            description = "finds book by its id")
     public BookDto getBook(@PathVariable Long id) {
         return bookService.findById(id);
     }
 
     @GetMapping
-    @Operation(summary = "find all books sorted and divided into pages",
-            description = "find all books sorted and divided into pages")
+    @Operation(summary = "finds all books sorted and divided into pages",
+            description = "finds all books sorted and divided into pages")
     public List<BookDto> getAllBooks(Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
     @GetMapping("/search")
-    @Operation(summary = "find books by specific criteria",
-            description = "find books by specific criteria")
+    @Operation(summary = "finds books by specific criteria",
+            description = "finds books by specific criteria")
     public List<BookDto> searchBooks(@RequestParam(required = false) String[] title,
                                      @RequestParam(required = false) String[] author) {
         BookSearchParametersDto bookSearchParametersDto =
