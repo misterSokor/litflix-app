@@ -54,18 +54,17 @@ public class BookController extends HttpServlet {
     @Operation(summary = "finds books by specific criteria",
             description = "finds books by specific criteria")
     public List<BookDto> searchBooks(@RequestParam(required = false) String[] title,
-                                     @RequestParam(required = false) String[] author,
-                                     Pageable pageable) {
+                                     @RequestParam(required = false) String[] author) {
         BookSearchParametersDto bookSearchParametersDto =
                 new BookSearchParametersDto(title, author);
-        return bookService.search(bookSearchParametersDto, pageable);
+        return bookService.search(bookSearchParametersDto);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "method is used to update existing book",
             description = "method is used to update existing book")
     public BookDto updateBook(@PathVariable Long id,
-                              @RequestBody @Valid UpdateBookRequestDto requestDto) {
+                              @RequestBody UpdateBookRequestDto requestDto) {
         return bookService.updateBook(id, requestDto);
     }
 
