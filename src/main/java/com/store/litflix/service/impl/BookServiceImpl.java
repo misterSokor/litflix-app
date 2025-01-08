@@ -1,9 +1,9 @@
 package com.store.litflix.service.impl;
 
-import com.store.litflix.dto.BookDto;
-import com.store.litflix.dto.BookSearchParametersDto;
-import com.store.litflix.dto.CreateBookRequestDto;
-import com.store.litflix.dto.UpdateBookRequestDto;
+import com.store.litflix.dto.book.BookDto;
+import com.store.litflix.dto.book.BookSearchParametersDto;
+import com.store.litflix.dto.book.CreateBookRequestDto;
+import com.store.litflix.dto.book.UpdateBookRequestDto;
 import com.store.litflix.exception.EntityNotFoundException;
 import com.store.litflix.mapper.BookMapper;
 import com.store.litflix.model.Book;
@@ -12,6 +12,7 @@ import com.store.litflix.repository.book.BookSpecificationBuilder;
 import com.store.litflix.service.BookService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +31,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> findAll() {
-        return bookRepository.findAll()
+    public List<BookDto> findAll(Pageable pageable) {
+        return bookRepository.findAll(pageable)
                 .stream()
                 .map(bookMapper::toDto)
                 .toList();
@@ -46,11 +47,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> search(BookSearchParametersDto searchParameters) {
+    public List<BookDto> search(BookSearchParametersDto searchParameters, Pageable pageable) {
         Specification<Book> bookSpecification =
                 specificationBuilder.build(searchParameters);
         return bookRepository
-                .findAll(bookSpecification)
+                .findAll(bookSpecification, pageable)
                 .stream()
                 .map(bookMapper::toDto)
                 .toList();

@@ -1,9 +1,9 @@
 package com.store.litflix.mapper;
 
 import com.store.litflix.config.MapperConfig;
-import com.store.litflix.dto.BookDto;
-import com.store.litflix.dto.CreateBookRequestDto;
-import com.store.litflix.dto.UpdateBookRequestDto;
+import com.store.litflix.dto.book.BookDto;
+import com.store.litflix.dto.book.CreateBookRequestDto;
+import com.store.litflix.dto.book.UpdateBookRequestDto;
 import com.store.litflix.model.Book;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
