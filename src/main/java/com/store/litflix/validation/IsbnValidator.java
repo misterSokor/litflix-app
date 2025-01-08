@@ -10,7 +10,7 @@ public class IsbnValidator implements ConstraintValidator<ValidIsbn, String> {
             return false;
         }
 
-        // Check if the ISBN is a 13-digit number
+        // Check if the ISBN is a 9-digit number
         return isbn.matches("\\d{9}");
     }
 }

@@ -1,4 +1,4 @@
-package com.store.litflix.dto;
+package com.store.litflix.dto.book;
 
 import com.store.litflix.validation.ValidIsbn;
 import jakarta.validation.constraints.Min;

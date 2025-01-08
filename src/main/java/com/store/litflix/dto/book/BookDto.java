@@ -1,4 +1,4 @@
-package com.store.litflix.dto;
+package com.store.litflix.dto.book;
 
 import java.math.BigDecimal;
 import lombok.Data;

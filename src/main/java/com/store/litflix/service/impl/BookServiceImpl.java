@@ -1,9 +1,9 @@
 package com.store.litflix.service.impl;
 
-import com.store.litflix.dto.BookDto;
-import com.store.litflix.dto.BookSearchParametersDto;
-import com.store.litflix.dto.CreateBookRequestDto;
-import com.store.litflix.dto.UpdateBookRequestDto;
+import com.store.litflix.dto.book.BookDto;
+import com.store.litflix.dto.book.BookSearchParametersDto;
+import com.store.litflix.dto.book.CreateBookRequestDto;
+import com.store.litflix.dto.book.UpdateBookRequestDto;
 import com.store.litflix.exception.EntityNotFoundException;
 import com.store.litflix.mapper.BookMapper;
 import com.store.litflix.model.Book;

@@ -1,0 +1,47 @@
+/* src/main/resources/static/css/index.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #a9b29a;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #ffd502;
+}
+
+form {
+    width: 20%;
+    background-color: #d9e0db;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 45%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #2f4a4f;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #a9141a;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ca777d;
+}
+
+

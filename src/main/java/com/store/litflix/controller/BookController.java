@@ -1,9 +1,9 @@
 package com.store.litflix.controller;
 
-import com.store.litflix.dto.BookDto;
-import com.store.litflix.dto.BookSearchParametersDto;
-import com.store.litflix.dto.CreateBookRequestDto;
-import com.store.litflix.dto.UpdateBookRequestDto;
+import com.store.litflix.dto.book.BookDto;
+import com.store.litflix.dto.book.BookSearchParametersDto;
+import com.store.litflix.dto.book.CreateBookRequestDto;
+import com.store.litflix.dto.book.UpdateBookRequestDto;
 import com.store.litflix.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
