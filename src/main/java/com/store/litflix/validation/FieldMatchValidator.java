@@ -2,7 +2,7 @@ package com.store.litflix.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import java.lang.reflect.Field;
+import org.springframework.beans.BeanWrapperImpl;
 
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
     private String firstFieldName;
@@ -18,29 +18,11 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
 
     @Override
     public boolean isValid(final Object value, final ConstraintValidatorContext context) {
-        try {
-            final Field firstField = value.getClass().getDeclaredField(firstFieldName);
-            final Field secondField = value.getClass().getDeclaredField(secondFieldName);
+        Object fieldValue = new BeanWrapperImpl(value)
+                .getPropertyValue(firstFieldName);
+        Object fieldMatchValue = new BeanWrapperImpl(value)
+                .getPropertyValue(secondFieldName);
 
-            firstField.setAccessible(true);
-            secondField.setAccessible(true);
-
-            final Object firstObj = firstField.get(value);
-            final Object secondObj = secondField.get(value);
-
-            boolean isValidated = (firstObj == null && secondObj == null)
-                                  || (firstObj != null
-                                      && firstObj.equals(secondObj));
-
-            if (!isValidated) {
-                context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(message)
-                        .addPropertyNode(secondFieldName)
-                        .addConstraintViolation();
-            }
-            return isValidated;
-        } catch (final Exception ignore) {
-            return false;
-        }
+        return fieldValue != null && fieldValue.equals(fieldMatchValue);
     }
 }
