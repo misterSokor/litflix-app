@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+<body>
+<h1>Register</h1>
+<form action="/auth/registration" method="post">
+    <label for="firstName">First Name</label>
+    <input type="text" name="firstName" required id="firstName">
+    <br/>
+
+    <label for="lastName">Last Name</label>
+    <input type="text" name="lastName" required id="lastName">
+    <br/>
+
+    <label for="email">Email</label>
+    <input type="email" name="email" required id="email">
+    <br/>
+
+    <label for="password">Password</label>
+    <input type="password" name="password" required id="password">
+    <br/>
+
+    <label for="repeatPassword">Password</label>
+    <input type="repeatPassword" name="repeatPassword" required id="repeatPassword">
+    <br/>
+
+    <label for="shippingAddress">Shipping Address</label>
+    <input type="text" name="shippingAddress" required id="shippingAddress">
+    <br/>
+
+    <button type="submit">Register</button>
+</form>
+</body>
+</html>

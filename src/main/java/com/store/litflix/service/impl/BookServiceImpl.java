@@ -14,6 +14,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,6 +24,7 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
     private final BookSpecificationBuilder specificationBuilder;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
         Book book = bookMapper.toModel(requestDto);
@@ -57,6 +59,7 @@ public class BookServiceImpl implements BookService {
                 .toList();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public BookDto updateBook(Long id, UpdateBookRequestDto requestDto) {
         Book book = bookRepository.findById(id)
@@ -67,6 +70,7 @@ public class BookServiceImpl implements BookService {
         return bookMapper.toDto(book);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public void deleteById(Long id) {
         bookRepository.deleteById(id);

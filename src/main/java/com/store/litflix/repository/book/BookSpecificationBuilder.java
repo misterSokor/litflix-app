@@ -15,7 +15,7 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
     private static final String TITLE_COLUMN_NAME = "title";
 
     private final SpecificationProviderManager<Book> bookSpecificationProviderManager;
- 
+
     @Override
     public Specification<Book> build(BookSearchParametersDto params) {
         Specification<Book> spec = Specification.where(null);
