@@ -2,32 +2,44 @@ package com.store.litflix.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-@EnableMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
+@EnableMethodSecurity
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
-
-    public SecurityConfig(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    @Operation(
+            summary = "Security filter chain",
+            description =
+                    "Creates and configures the security "
+                    + "filter chain for the application.",
+            tags = {"Security"},
+            responses = {
+                    @ApiResponse(responseCode =
+                            "200", description =
+                            "Security filter chain created successfully"),
+                    @ApiResponse(responseCode =
+                            "500", description = "Internal server error")
+            }
+    )
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

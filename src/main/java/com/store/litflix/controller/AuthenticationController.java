@@ -1,6 +1,5 @@
 package com.store.litflix.controller;
 
-import com.store.litflix.dto.user.UserLoginRequestDto;
 import com.store.litflix.dto.user.UserRegistrationRequestDto;
 import com.store.litflix.dto.user.UserResponseDto;
 import com.store.litflix.exception.RegistrationException;
@@ -11,6 +10,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,16 +28,10 @@ public class AuthenticationController {
 
     @Operation(summary = "Register a new user", description = "Register a new user")
     @PostMapping("/registration")
+    @PreAuthorize("hasRole('ADMIN')")
     public UserResponseDto register(
             @Valid
             @RequestBody UserRegistrationRequestDto requestDto) throws RegistrationException {
         return userService.registerUser(requestDto);
     }
-
-    @Operation(summary = "Login", description = "Login")
-    @PostMapping("/login")
-    public boolean login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
-        return true;
-    }
 }
-
