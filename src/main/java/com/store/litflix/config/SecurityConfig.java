@@ -3,7 +3,6 @@ package com.store.litflix.config;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,15 +29,7 @@ public class SecurityConfig {
             summary = "Security filter chain",
             description =
                     "Creates and configures the security "
-                    + "filter chain for the application.",
-            tags = {"Security"},
-            responses = {
-                    @ApiResponse(responseCode =
-                            "200", description =
-                            "Security filter chain created successfully"),
-                    @ApiResponse(responseCode =
-                            "500", description = "Internal server error")
-            }
+                    + "filter chain for the application."
     )
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

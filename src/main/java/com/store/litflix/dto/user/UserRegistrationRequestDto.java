@@ -28,6 +28,5 @@ public class UserRegistrationRequestDto {
     @NotBlank(message = "Last name is mandatory.")
     private String lastName;
 
-    @NotBlank(message = "Shipping address is mandatory.")
     private String shippingAddress;
 }

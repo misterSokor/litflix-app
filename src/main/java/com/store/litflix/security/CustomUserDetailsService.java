@@ -1,5 +1,6 @@
 package com.store.litflix.security;
 
+import com.store.litflix.exception.EntityNotFoundException;
 import com.store.litflix.model.User;
 import com.store.litflix.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throws UsernameNotFoundException {
         User user = userRepository.findByEmail(
                 email).orElseThrow(() ->
-                new UsernameNotFoundException("Can't find user by email"));
+                new EntityNotFoundException("Can't find user by email"));
 
         return user;
     }

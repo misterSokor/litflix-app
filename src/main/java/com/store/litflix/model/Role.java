@@ -1,6 +1,5 @@
 package com.store.litflix.model;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,21 +11,26 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
 
-@Tag(name = "Role management", description = "Roles names for managing roles")
 @Entity
 @Setter
 @Getter
 @ToString
 @Table(name = "roles")
-public class Role {
+public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role_name", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private RoleName roleName;
+
+    @Override
+    public String getAuthority() {
+        return roleName.name();
+    }
 }
 
 
