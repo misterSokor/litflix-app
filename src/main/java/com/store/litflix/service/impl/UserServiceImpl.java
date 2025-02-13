@@ -32,21 +32,11 @@ public class UserServiceImpl implements UserService {
                     + " already exists");
         }
 
-        User user = new User();
-
-        Role usersRole = roleRepository.findByRoleName(RoleName.ROLE_USER);
-        if (usersRole == null) {
-            usersRole = new Role();
-            usersRole.setRoleName(RoleName.ROLE_USER);
-            roleRepository.save(usersRole);
-        }
-        user.getRoles().add(usersRole);
-
+        User user = userMapper.toEntity(requestDto);
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        user.setFirstName(requestDto.getFirstName());
-        user.setLastName(requestDto.getLastName());
-        user.setEmail(requestDto.getEmail());
-        user.setShippingAddress(requestDto.getShippingAddress());
+
+        Role userRole = roleRepository.findByRoleName(RoleName.ROLE_USER);
+        user.getRoles().add(userRole);
 
         User savedUser = userRepository.save(user);
         return userMapper.toUserResponse(savedUser);

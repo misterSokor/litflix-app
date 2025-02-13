@@ -10,7 +10,8 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,9 +27,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
     private final UserService userService;
 
+    @GetMapping("/registration")
+    public String showRegistrationForm(Model model) {
+        // Provide an empty DTO to the form
+        model.addAttribute("user", new UserRegistrationRequestDto());
+        return "registration";
+    }
+
     @Operation(summary = "Register a new user", description = "Register a new user")
     @PostMapping("/registration")
-    @PreAuthorize("hasRole('ADMIN')")
     public UserResponseDto register(
             @Valid
             @RequestBody UserRegistrationRequestDto requestDto) throws RegistrationException {
