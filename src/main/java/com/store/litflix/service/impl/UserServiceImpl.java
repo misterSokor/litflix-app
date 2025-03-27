@@ -11,6 +11,7 @@ import com.store.litflix.repository.roles.RoleRepository;
 import com.store.litflix.repository.user.UserRepository;
 import com.store.litflix.security.JwtUtil;
 import com.store.litflix.service.UserService;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,14 +37,12 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
 
         Role userRole = roleRepository.findByRoleName(RoleName.ROLE_USER);
-        user.getRoles().add(userRole);
+        user.setRoles(Set.of(userRole));
 
         userRepository.save(user);
 
-        // ✅ Generate JWT Token for the new user
         String token = jwtUtil.generateToken(user.getEmail());
 
         return new UserLoginResponseDto(token);
     }
-
 }

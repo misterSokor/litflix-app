@@ -10,27 +10,27 @@ import java.util.Date;
 import java.util.function.Function;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
-@Component
-public class JwtUtil {
+public class JwtUtilPractice {
     private final SecretKey secret;
 
     @Value("${jwt.expiration-time}")
     private long expirationTime;
 
-    public JwtUtil(@Value("${jwt.secret}") String secretString) {
+    public JwtUtilPractice(@Value("${jwt.secret}") String secretString) {
         if (secretString.length() < 32) {
-            throw new IllegalArgumentException("Secret must be at least 32 characters long");
+            throw new IllegalArgumentException("the secret has to be at least"
+                                               + " 32 characters long");
         }
-        secret = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_8));
+        secret =
+                Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_8));
     }
 
     public String generateToken(String userNameAsEmail) {
         return Jwts.builder()
                 .subject(userNameAsEmail)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expirationTime))
+                .expiration(new Date(System.currentTimeMillis()))
                 .signWith(secret)
                 .compact();
     }
@@ -46,10 +46,6 @@ public class JwtUtil {
         } catch (JwtException | IllegalArgumentException e) {
             throw new JwtException("Expired or invalid JWT token");
         }
-    }
-
-    public String getUsernameFromToken(String token) {
-        return getClaimFromToken(token, Claims::getSubject);
     }
 
     private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {

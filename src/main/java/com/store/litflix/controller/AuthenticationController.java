@@ -7,6 +7,7 @@ import com.store.litflix.exception.RegistrationException;
 import com.store.litflix.security.AuthenticationService;
 import com.store.litflix.service.UserService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,11 +28,15 @@ public class AuthenticationController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
 
+    @Tag(name = "Authentication", description = "Endpoints for login, "
+                                                + "Authenticates a user and "
+                                                + "returns an authentication token")
     @PostMapping("/login")
-    public UserLoginResponseDto login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
+    public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto userLoginRequestDto) {
         return authenticationService.authenticate(userLoginRequestDto);
     }
 
+    @Operation(summary = "Register a new user", description = "Register a new user")
     @PostMapping("/registration")
     public UserLoginResponseDto register(
             @Valid
