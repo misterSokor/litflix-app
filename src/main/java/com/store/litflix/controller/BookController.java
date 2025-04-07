@@ -13,6 +13,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,8 +49,9 @@ public class BookController extends HttpServlet {
     @GetMapping
     @Operation(summary = "finds all books sorted and divided into pages",
             description = "finds all books sorted and divided into pages")
-    public List<BookDto> getAllBooks(Pageable pageable) {
-        return bookService.findAll(pageable);
+    public List<BookDto> getAllBooks(Authentication authentication, Pageable pageable) {
+        String userNameAsEmail = authentication.getName();
+        return bookService.findAll(userNameAsEmail, pageable);
     }
 
     @GetMapping("/search")

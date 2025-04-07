@@ -1,7 +1,7 @@
 package com.store.litflix.service.impl;
 
-import com.store.litflix.dto.user.UserLoginResponseDto;
 import com.store.litflix.dto.user.UserRegistrationRequestDto;
+import com.store.litflix.dto.user.UserResponseDto;
 import com.store.litflix.exception.RegistrationException;
 import com.store.litflix.mapper.UserMapper;
 import com.store.litflix.model.Role;
@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
 
     @Override
-    public UserLoginResponseDto registerUser(
+    public UserResponseDto registerUser(
             UserRegistrationRequestDto requestDto) throws RegistrationException {
         if (userRepository.existsByEmail(requestDto.getEmail())) {
             throw new RegistrationException(
@@ -40,9 +40,6 @@ public class UserServiceImpl implements UserService {
         user.setRoles(Set.of(userRole));
 
         userRepository.save(user);
-
-        String token = jwtUtil.generateToken(user.getEmail());
-
-        return new UserLoginResponseDto(token);
+        return userMapper.toUserResponse(user);
     }
 }

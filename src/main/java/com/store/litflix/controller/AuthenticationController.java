@@ -3,6 +3,7 @@ package com.store.litflix.controller;
 import com.store.litflix.dto.user.UserLoginRequestDto;
 import com.store.litflix.dto.user.UserLoginResponseDto;
 import com.store.litflix.dto.user.UserRegistrationRequestDto;
+import com.store.litflix.dto.user.UserResponseDto;
 import com.store.litflix.exception.RegistrationException;
 import com.store.litflix.security.AuthenticationService;
 import com.store.litflix.service.UserService;
@@ -28,7 +29,7 @@ public class AuthenticationController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
 
-    @Tag(name = "Authentication", description = "Endpoints for login, "
+    @Tag(name = "Authentication", description = "Endpoint for login, "
                                                 + "Authenticates a user and "
                                                 + "returns an authentication token")
     @PostMapping("/login")
@@ -38,7 +39,7 @@ public class AuthenticationController {
 
     @Operation(summary = "Register a new user", description = "Register a new user")
     @PostMapping("/registration")
-    public UserLoginResponseDto register(
+    public UserResponseDto register(
             @Valid
             @RequestBody UserRegistrationRequestDto requestDto) throws RegistrationException {
         return userService.registerUser(requestDto);
