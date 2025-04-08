@@ -1,2 +1,0 @@
-jwt.expiration-time=604800000
-jwt.secret=UnbreakableSecureKeyForAccessControl2025

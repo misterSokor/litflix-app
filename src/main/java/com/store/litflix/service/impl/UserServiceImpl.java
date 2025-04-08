@@ -9,7 +9,6 @@ import com.store.litflix.model.RoleName;
 import com.store.litflix.model.User;
 import com.store.litflix.repository.roles.RoleRepository;
 import com.store.litflix.repository.user.UserRepository;
-import com.store.litflix.security.JwtUtil;
 import com.store.litflix.service.UserService;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
-    private final JwtUtil jwtUtil;
 
     @Override
     public UserResponseDto registerUser(

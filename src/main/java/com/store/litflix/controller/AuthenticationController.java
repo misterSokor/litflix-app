@@ -29,9 +29,7 @@ public class AuthenticationController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
 
-    @Tag(name = "Authentication", description = "Endpoint for login, "
-                                                + "Authenticates a user and "
-                                                + "returns an authentication token")
+    @Operation(summary = "Authentication", description = "Endpoint for login, ")
     @PostMapping("/login")
     public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto userLoginRequestDto) {
         return authenticationService.authenticate(userLoginRequestDto);

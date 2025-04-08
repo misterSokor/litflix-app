@@ -19,7 +19,7 @@ public class AuthenticationService {
                 new UsernamePasswordAuthenticationToken(userLoginRequestDto.email(),
                         userLoginRequestDto.password()));
 
-        String token = jwtUtil.generateToken(userLoginRequestDto.email());
+        String token = jwtUtil.generateToken(authentication.getName());
         return new UserLoginResponseDto(token);
     }
 }
