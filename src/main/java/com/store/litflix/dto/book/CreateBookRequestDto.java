@@ -23,6 +23,6 @@ public class CreateBookRequestDto {
     private String description;
     @URL
     private String coverImage;
-
+    @NotBlank
     private List<Long> categoryIds;
 }
