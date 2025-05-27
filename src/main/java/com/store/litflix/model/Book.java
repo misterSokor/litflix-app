@@ -16,18 +16,12 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.ParamDef;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id = ?")
 @SQLRestriction("is_deleted = false")
-@FilterDef(name = "deleteById", parameters = @ParamDef(name = "isDeleted",
-        type = Boolean.class))
-@Filter(name = "deleteById", condition = "is_deleted = :isDeleted")
 @Table(name = "books")
 @Getter
 @Setter

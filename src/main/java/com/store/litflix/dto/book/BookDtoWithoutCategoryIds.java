@@ -1,6 +1,6 @@
 package com.store.litflix.dto.book;
 
-import com.store.litflix.dto.category.CategoryDto;
+import com.store.litflix.dto.category.CategoryNameDescriptionDto;
 import java.math.BigDecimal;
 import java.util.Set;
 import lombok.Data;
@@ -14,5 +14,5 @@ public class BookDtoWithoutCategoryIds {
     private BigDecimal price;
     private String description;
     private String coverImage;
-    private Set<CategoryDto> categories;
+    private Set<CategoryNameDescriptionDto> categories;
 }

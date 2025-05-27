@@ -3,6 +3,7 @@ package com.store.litflix.dto.book;
 import com.store.litflix.validation.ValidIsbn;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,6 +24,6 @@ public class CreateBookRequestDto {
     private String description;
     @URL
     private String coverImage;
-    @NotBlank
+    @NotEmpty
     private List<Long> categoryIds;
 }
