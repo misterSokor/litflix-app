@@ -19,6 +19,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                new EntityNotFoundException("Can't find user by email"));
+                        new EntityNotFoundException("Can't find user by email"));
     }
 }
