@@ -1,9 +1,8 @@
 package com.store.litflix.service.impl;
 
-import com.store.litflix.dto.cart.ShoppingCartRequestDto;
+import com.store.litflix.dto.cart.CartItemRequestDto;
 import com.store.litflix.dto.cart.ShoppingCartResponseDto;
 import com.store.litflix.exception.CartItemAccessDeniedException;
-import com.store.litflix.exception.CartItemNotFoundException;
 import com.store.litflix.exception.EntityNotFoundException;
 import com.store.litflix.mapper.ShoppingCartMapper;
 import com.store.litflix.model.Book;
@@ -30,11 +29,8 @@ public class CartServiceImpl implements CartService {
     private final ShoppingCartMapper shoppingCartMapper;
 
     @Override
-    public ShoppingCartResponseDto addBookToCart(ShoppingCartRequestDto requestDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
+    public ShoppingCartResponseDto addBookToCart(CartItemRequestDto requestDto) {
+        User user = getCurrentUser();
         Book book = bookRepository.findById(requestDto.getBookId()).orElseThrow(
                 () -> new RuntimeException("The book wos not found.")
         );
@@ -42,11 +38,7 @@ public class CartServiceImpl implements CartService {
         int quantity = requestDto.getQuantity();
 
         ShoppingCart shoppingCart = cartRepository.findByUserId(user.getId())
-                .orElseGet(() -> {
-                    ShoppingCart newCart = new ShoppingCart();
-                    newCart.setUser(user);
-                    return cartRepository.save(newCart);
-                });
+                .orElseGet(() -> createNewCart(user));
 
         CartItem cartItem = new CartItem();
         cartItem.setBook(book);
@@ -54,16 +46,28 @@ public class CartServiceImpl implements CartService {
         cartItem.setShoppingCart(shoppingCart);
         cartItem = cartItemRepository.save(cartItem);
         shoppingCart.getCartItems().add(cartItem);
+        cartRepository.save(shoppingCart);
 
         cartRepository.save(shoppingCart);
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
-    @Override
-    public ShoppingCartResponseDto getCartInfo() {
+    private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        return user;
+    }
+
+    private ShoppingCart createNewCart(User user) {
+        ShoppingCart newCart = new ShoppingCart();
+        newCart.setUser(user);
+        return cartRepository.save(newCart);
+    }
+
+    @Override
+    public ShoppingCartResponseDto getCartInfo() {
+        User user = getCurrentUser();
 
         ShoppingCart shoppingCart = cartRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new RuntimeException("Shopping cart not found"));
@@ -73,9 +77,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public ShoppingCartResponseDto updateCartItemQuantity(Long cartItemId, int quantity) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(auth.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = getCurrentUser();
 
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new RuntimeException("Cart item not found"));
@@ -93,15 +95,12 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void removeCartItem(Long cartItemId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(auth.getName())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        User user = getCurrentUser();
+        ShoppingCart cart = cartRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Shopping cart not found"));
 
-        CartItem cartItem = cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new CartItemNotFoundException(
-                        "Cart item not found"));
-
-        ShoppingCart cart = cartItem.getShoppingCart();
+        CartItem cartItem =
+                cartItemRepository.findByIdAndShoppingCartId(cartItemId, cart.getId());
 
         if (!cart.getUser().getId().equals(user.getId())) {
             throw new CartItemAccessDeniedException(

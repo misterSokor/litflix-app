@@ -3,7 +3,7 @@ package com.store.litflix.dto.cart;
 import lombok.Data;
 
 @Data
-public class ShoppingCartRequestDto {
+public class CartItemRequestDto {
     private Long bookId;
     private int quantity;
 }

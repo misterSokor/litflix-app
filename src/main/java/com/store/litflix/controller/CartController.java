@@ -1,11 +1,12 @@
 package com.store.litflix.controller;
 
-import com.store.litflix.dto.cart.ShoppingCartRequestDto;
+import com.store.litflix.dto.cart.CartItemRequestDto;
 import com.store.litflix.dto.cart.ShoppingCartResponseDto;
-import com.store.litflix.dto.cart.UpdateCartItemQuantityRequestDto;
+import com.store.litflix.dto.cart.UpdateCartItemDto;
 import com.store.litflix.service.CartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,7 +34,7 @@ public class CartController {
     )
     @PostMapping
     public ShoppingCartResponseDto addBookToCart(
-            @RequestBody ShoppingCartRequestDto request) {
+            @RequestBody @Valid CartItemRequestDto request) {
         return cartService.addBookToCart(request);
     }
 
@@ -54,7 +55,7 @@ public class CartController {
     @PutMapping("/cart-items/{cartItemId}")
     public ShoppingCartResponseDto updateCartItemQuantity(
             @PathVariable Long cartItemId,
-            @RequestBody UpdateCartItemQuantityRequestDto requestDto
+            @RequestBody @Valid UpdateCartItemDto requestDto
     ) {
         return cartService.updateCartItemQuantity(cartItemId, requestDto.getQuantity());
     }
