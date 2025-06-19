@@ -55,9 +55,8 @@ public class CartServiceImpl implements CartService {
         cartItem = cartItemRepository.save(cartItem);
         shoppingCart.getCartItems().add(cartItem);
 
-        ShoppingCart saved = cartRepository.save(shoppingCart);
-
-        return shoppingCartMapper.toDto(saved);
+        cartRepository.save(shoppingCart);
+        return shoppingCartMapper.toDto(shoppingCart);
     }
 
     @Override
