@@ -1,5 +1,6 @@
 package com.store.litflix.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.Collection;
 import java.util.HashSet;
@@ -42,6 +44,9 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private boolean isDeleted;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ShoppingCart shoppingCart;
 
     @ManyToMany
     @JoinTable(

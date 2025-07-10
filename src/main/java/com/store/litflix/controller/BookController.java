@@ -1,6 +1,6 @@
 package com.store.litflix.controller;
 
-import com.store.litflix.dto.book.BookDto;
+import com.store.litflix.dto.book.BookResponseDto;
 import com.store.litflix.dto.book.BookSearchParametersDto;
 import com.store.litflix.dto.book.CreateBookRequestDto;
 import com.store.litflix.dto.book.UpdateBookRequestDto;
@@ -34,29 +34,29 @@ public class BookController extends HttpServlet {
     @Operation(summary = "Creates a new book",
             description = "creates a new book")
     @PreAuthorize("hasRole('ADMIN')")
-    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
+    public BookResponseDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "finds book by its id",
             description = "finds book by its id")
-    public BookDto getBook(@PathVariable Long id) {
+    public BookResponseDto getBook(@PathVariable Long id) {
         return bookService.findById(id);
     }
 
     @GetMapping
     @Operation(summary = "finds all books sorted and divided into pages",
             description = "finds all books sorted and divided into pages")
-    public List<BookDto> getAllBooks(Pageable pageable) {
+    public List<BookResponseDto> getAllBooks(Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
     @GetMapping("/search")
     @Operation(summary = "finds books by specific criteria",
             description = "finds books by specific criteria")
-    public List<BookDto> searchBooks(@RequestParam(required = false) String[] title,
-                                     @RequestParam(required = false) String[] author) {
+    public List<BookResponseDto> searchBooks(@RequestParam(required = false) String[] title,
+                                             @RequestParam(required = false) String[] author) {
         BookSearchParametersDto bookSearchParametersDto =
                 new BookSearchParametersDto(title, author);
         return bookService.search(bookSearchParametersDto);
@@ -66,8 +66,8 @@ public class BookController extends HttpServlet {
     @Operation(summary = "method is used to update existing book",
             description = "method is used to update existing book")
     @PreAuthorize("hasRole('ADMIN')")
-    public BookDto updateBook(@PathVariable Long id,
-                              @RequestBody UpdateBookRequestDto requestDto) {
+    public BookResponseDto updateBook(@PathVariable Long id,
+                                      @RequestBody UpdateBookRequestDto requestDto) {
         return bookService.updateBook(id, requestDto);
     }
 
