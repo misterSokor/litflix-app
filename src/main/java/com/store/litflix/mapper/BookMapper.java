@@ -22,7 +22,9 @@ public interface BookMapper {
     @Named("mapCategoryIds")
     static List<Long> mapCategoryIds(Set<Category> categories) {
         return categories == null ? null :
-                categories.stream().map(com.store.litflix.model.Category::getId).toList();
+                categories.stream()
+                        .map(Category::getId)
+                        .toList();
     }
 
     Book toModel(CreateBookRequestDto bookDto);

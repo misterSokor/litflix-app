@@ -6,13 +6,16 @@ import com.store.litflix.model.ShoppingCart;
 import com.store.litflix.model.User;
 
 public interface CartService {
-    ShoppingCartResponseDto addBookToCart(CartItemRequestDto requestDto);
+    ShoppingCartResponseDto addBookToCart(CartItemRequestDto requestDto,
+                                          Long userId);
 
-    ShoppingCartResponseDto getCartInfo();
+    ShoppingCartResponseDto getCartInfo(Long userId);
 
-    ShoppingCartResponseDto updateCartItemQuantity(Long cartItemId, int quantity);
+    ShoppingCartResponseDto updateCartItemQuantity(Long cartItemId,
+                                                   int quantity,
+                                                   Long userId);
 
-    void removeCartItem(Long cartItemId);
+    void removeCartItem(Long cartItemId, Long userId);
 
     ShoppingCart createShoppingCart(User user);
 }
