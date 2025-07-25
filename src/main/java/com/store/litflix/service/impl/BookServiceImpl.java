@@ -1,6 +1,6 @@
 package com.store.litflix.service.impl;
 
-import com.store.litflix.dto.book.BookDto;
+import com.store.litflix.dto.book.BookResponseDto;
 import com.store.litflix.dto.book.BookSearchParametersDto;
 import com.store.litflix.dto.book.CreateBookRequestDto;
 import com.store.litflix.dto.book.UpdateBookRequestDto;
@@ -29,7 +29,7 @@ public class BookServiceImpl implements BookService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public BookDto save(CreateBookRequestDto requestDto) {
+    public BookResponseDto save(CreateBookRequestDto requestDto) {
         Book book = bookMapper.toModel(requestDto);
         if (requestDto.getCategoryIds() != null && !requestDto.getCategoryIds().isEmpty()) {
             Set<Category> categories = requestDto.getCategoryIds().stream()
@@ -38,7 +38,6 @@ public class BookServiceImpl implements BookService {
                                     new EntityNotFoundException(
                                             "Category not found with id " + id)))
                     .collect(Collectors.toSet());
-
             book.setCategories(categories);
         }
 
@@ -47,7 +46,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> findAll(Pageable pageable) {
+    public List<BookResponseDto> findAll(Pageable pageable) {
         return bookRepository.findAll(pageable)
                 .stream()
                 .map(bookMapper::toDto)
@@ -55,7 +54,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto findById(Long id) {
+    public BookResponseDto findById(Long id) {
         Book bookById = bookRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Book not "
                                                                + "found with id " + id));
@@ -63,7 +62,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> search(BookSearchParametersDto searchParameters) {
+    public List<BookResponseDto> search(BookSearchParametersDto searchParameters) {
         Specification<Book> bookSpecification =
                 specificationBuilder.build(searchParameters);
         return bookRepository
@@ -74,7 +73,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto updateBook(Long id, UpdateBookRequestDto requestDto) {
+    public BookResponseDto updateBook(Long id, UpdateBookRequestDto requestDto) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Book not "
                                                                + "found with id " + id));

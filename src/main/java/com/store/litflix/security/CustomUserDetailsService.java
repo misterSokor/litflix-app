@@ -21,4 +21,9 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() ->
                         new EntityNotFoundException("Can't find user by email"));
     }
+
+    public UserDetails loadByUserId(Long userId) {
+        return userRepository.findByIdWithRoles(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Can't find user by ID: " + userId));
+    }
 }
