@@ -42,10 +42,6 @@ public class CartController {
         return cartService.addBookToCart(request, userId);
     }
 
-    private Long extractUserId(Authentication authentication) {
-        return Long.parseLong(authentication.getName());
-    }
-
     @Operation(
             summary = "Get current shopping cart",
             description = "Returns the current user's shopping cart"
@@ -84,5 +80,9 @@ public class CartController {
                                Authentication authentication) {
         Long userId = extractUserId(authentication);
         cartService.removeCartItem(cartItemId, userId);
+    }
+
+    private Long extractUserId(Authentication authentication) {
+        return Long.parseLong(authentication.getName());
     }
 }

@@ -67,7 +67,7 @@ public class BookController extends HttpServlet {
             description = "method is used to update existing book")
     @PreAuthorize("hasRole('ADMIN')")
     public BookResponseDto updateBook(@PathVariable Long id,
-                                      @RequestBody UpdateBookRequestDto requestDto) {
+                                      @RequestBody @Valid UpdateBookRequestDto requestDto) {
         return bookService.updateBook(id, requestDto);
     }
 
