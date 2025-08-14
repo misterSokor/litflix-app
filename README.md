@@ -2,9 +2,12 @@
 # Litflix — Online Book Store API 📚
 
 > A Spring Boot REST API for managing books, categories, shopping carts, and orders with JWT-based authentication and Liquibase-managed schema migrations.
->Project statement:
-> This application helps readers easily browse, search, and purchase books from the comfort of their home. It offers personalized recommendations, secure and fast checkout, and a well-organized digital library, ensuring that readers can discover
-
+>
+> 
+>Problem statement:
+> 
+> This application helps readers easily browse, search, and purchase books from the comfort of their home. It offers personalized recommendations, secure and fast checkout, and a well-organized digital library, ensuring that readers can discover, buy, and enjoy books
+> 
 <img width="284" height="430" alt="Screen Shot 2025-08-13 at 22 18 40" src="https://github.com/user-attachments/assets/d6fd8ecc-5928-4053-ab12-3c054b791fad" />
 ---
 
