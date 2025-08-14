@@ -5,7 +5,7 @@
 ![Maven Central](https://img.shields.io/maven-central/v/com.store/litflix)  
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)  
 
->![Uploading LitFlix_app.png…]()<
+<img width="591" height="836" alt="Screen Shot 2025-08-13 at 22 17 16" src="https://github.com/user-attachments/assets/2e42345e-4a23-4d0d-88ba-b13c75fb6d1c" />
 
 > A Spring Boot REST API for managing books, categories, shopping carts, and orders with JWT-based authentication and Liquibase-managed schema migrations.
 
