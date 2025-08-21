@@ -1,11 +1,6 @@
 
 # Litflix — Online Book Store API 📚
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)  
-![Maven Central](https://img.shields.io/maven-central/v/com.store/litflix)  
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)  
-
-> **Status:** Snapshot build `0.0.1-SNAPSHOT` (generated 2025-08-14)  
 > A Spring Boot REST API for managing books, categories, shopping carts, and orders with JWT-based authentication and Liquibase-managed schema migrations.
 
 ---
