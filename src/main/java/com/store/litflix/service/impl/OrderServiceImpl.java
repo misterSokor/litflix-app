@@ -1,8 +1,11 @@
 package com.store.litflix.service.impl;
 
+import com.store.litflix.dto.order.OrderItemDto;
 import com.store.litflix.dto.order.OrderRequestDto;
 import com.store.litflix.dto.order.OrderResponseDto;
 import com.store.litflix.exception.EntityNotFoundException;
+import com.store.litflix.exception.OrderProcessingException;
+import com.store.litflix.mapper.OrderItemMapper;
 import com.store.litflix.mapper.OrderMapper;
 import com.store.litflix.model.CartItem;
 import com.store.litflix.model.Order;
@@ -17,6 +20,7 @@ import com.store.litflix.service.OrderService;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +32,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
     private final OrderMapper orderMapper;
+    private final OrderItemMapper orderItemMapper;
 
     @Override
     public OrderResponseDto placeOrder(OrderRequestDto orderRequestDto, Long userId) {
@@ -39,33 +44,86 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setUser(user);
         order.setStatus(Status.PENDING);
-
         order.setOrderDate(java.time.LocalDateTime.now());
         order.setShippingAddress(shippingAddress);
 
+        BigDecimal totalAmount = BigDecimal.ZERO;
         ShoppingCart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Shopping cart not found for user: " + userId));
-        BigDecimal total = BigDecimal.ZERO;
-        for (CartItem ci : cart.getCartItems()) {
-            OrderItem oi = new OrderItem();
-            oi.setOrder(order);
-            oi.setBook(ci.getBook());
-            oi.setQuantity(ci.getQuantity());
-            oi.setPrice(ci.getBook().getPrice());
-            order.getOrderItems().add(oi);
+        if (cart.getCartItems().isEmpty()) {
+            throw new OrderProcessingException("Cannot place order with empty cart");
+        } else {
+            for (CartItem cartItem : cart.getCartItems()) {
+                OrderItem orderItem = new OrderItem();
+                orderItem.setOrder(order);
+                orderItem.setBook(cartItem.getBook());
+                orderItem.setQuantity(cartItem.getQuantity());
+                orderItem.setPrice(cartItem.getBook().getPrice());
+                order.getOrderItems().add(orderItem);
 
-            total = total.add(
-                    oi.getPrice()
-                            .multiply(BigDecimal.valueOf(oi.getQuantity()))
-                            .setScale(2, RoundingMode.HALF_UP)
-            );
+                totalAmount = totalAmount.add(
+                        orderItem.getPrice()
+                                .multiply(BigDecimal.valueOf(orderItem.getQuantity()))
+                                .setScale(2, RoundingMode.HALF_UP)
+                );
+            }
         }
 
-        order.setTotal(total.setScale(2, RoundingMode.HALF_UP));
+        order.setTotal(totalAmount.setScale(2, RoundingMode.HALF_UP));
 
-        Order saved = orderRepository.save(order);
+        orderRepository.save(order);
         cart.getCartItems().clear();
-        return orderMapper.toDto(saved);
+        return orderMapper.toDto(order);
+    }
+
+    @Override
+    public List<OrderResponseDto> getOrderHistory(Long userId) {
+        List<Order> orders = orderRepository.findOrdersByUserId(userId);
+
+        return orders.stream()
+                .map(orderMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<OrderItemDto> getOrderItems(Long orderId, Long userId) {
+        Order order = findOrderByIdAndUserId(orderId, userId);
+
+        return order.getOrderItems().stream()
+                .map(orderItemMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public OrderItemDto getOrderItemById(Long orderId, Long userId, Long orderItemId) {
+        Order order = findOrderByIdAndUserId(orderId, userId);
+
+        OrderItem orderItem = order.getOrderItems().stream()
+                .filter(item -> item.getId().equals(orderItemId))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Order item with id: " + orderItemId + " not found in order with id: "
+                        + orderId
+                ));
+        return orderItemMapper.toDto(orderItem);
+    }
+
+    @Override
+    public OrderResponseDto updateOrderStatus(Long orderId, Status status,
+                                              Long userId) {
+        Order order = findOrderByIdAndUserId(orderId, userId);
+
+        order.setStatus(status);
+        orderRepository.save(order);
+        return orderMapper.toDto(order);
+    }
+
+    private Order findOrderByIdAndUserId(Long orderId, Long userId) {
+        return orderRepository.findByIdAndUserId(orderId, userId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Order with id: " + orderId + " not found or does not "
+                        + "belong to the user with id: " + userId
+                ));
     }
 }
