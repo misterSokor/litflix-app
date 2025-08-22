@@ -36,42 +36,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDto placeOrder(OrderRequestDto orderRequestDto, Long userId) {
-        User user =
-                userRepository.findById(userId).orElseThrow(
-                        () -> new EntityNotFoundException("User not found: " + userId));
-        String shippingAddress = orderRequestDto.getShippingAddress();
-
-        Order order = new Order();
-        order.setUser(user);
-        order.setStatus(Status.PENDING);
-        order.setOrderDate(java.time.LocalDateTime.now());
-        order.setShippingAddress(shippingAddress);
-
-        BigDecimal totalAmount = BigDecimal.ZERO;
-        ShoppingCart cart = cartRepository.findByUserId(userId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Shopping cart not found for user: " + userId));
-        if (cart.getCartItems().isEmpty()) {
-            throw new OrderProcessingException("Cannot place order with empty cart");
-        } else {
-            for (CartItem cartItem : cart.getCartItems()) {
-                OrderItem orderItem = new OrderItem();
-                orderItem.setOrder(order);
-                orderItem.setBook(cartItem.getBook());
-                orderItem.setQuantity(cartItem.getQuantity());
-                orderItem.setPrice(cartItem.getBook().getPrice());
-                order.getOrderItems().add(orderItem);
-
-                totalAmount = totalAmount.add(
-                        orderItem.getPrice()
-                                .multiply(BigDecimal.valueOf(orderItem.getQuantity()))
-                                .setScale(2, RoundingMode.HALF_UP)
-                );
-            }
-        }
+        User user = findUser(userId);
+        Order order = initOrder(user, orderRequestDto.getShippingAddress());
+        ShoppingCart cart = findCart(userId);
+        validateCartNotEmpty(cart);
+        BigDecimal totalAmount = attachItemsFromCartAndComputeTotal(order, cart);
 
         order.setTotal(totalAmount.setScale(2, RoundingMode.HALF_UP));
-
         orderRepository.save(order);
         cart.getCartItems().clear();
         return orderMapper.toDto(order);
@@ -125,5 +96,52 @@ public class OrderServiceImpl implements OrderService {
                         "Order with id: " + orderId + " not found or does not "
                         + "belong to the user with id: " + userId
                 ));
+    }
+
+    private User findUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("User not found: " + userId));
+    }
+
+    private Order initOrder(User user, String shippingAddress) {
+        Order order = new Order();
+        order.setUser(user);
+        order.setStatus(Status.PENDING);
+        order.setOrderDate(java.time.LocalDateTime.now());
+        order.setShippingAddress(shippingAddress);
+        return order;
+    }
+
+    private ShoppingCart findCart(Long userId) {
+        return cartRepository.findByUserId(userId).orElseThrow(
+                () -> new EntityNotFoundException(
+                        "Shopping cart not found for user: " + userId)
+        );
+    }
+
+    private void validateCartNotEmpty(ShoppingCart cart) {
+        if (cart.getCartItems().isEmpty()) {
+            throw new OrderProcessingException("Cannot place order with empty cart");
+        }
+    }
+
+    private BigDecimal attachItemsFromCartAndComputeTotal(Order order,
+                                                          ShoppingCart cart) {
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        for (CartItem cartItem : cart.getCartItems()) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(order);
+            orderItem.setBook(cartItem.getBook());
+            orderItem.setQuantity(cartItem.getQuantity());
+            orderItem.setPrice(cartItem.getBook().getPrice());
+            order.getOrderItems().add(orderItem);
+
+            totalAmount = totalAmount.add(
+                    orderItem.getPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity()))
+            );
+        }
+        order.setTotal(totalAmount.setScale(2, RoundingMode.HALF_UP));
+
+        return totalAmount;
     }
 }

@@ -42,11 +42,6 @@ public class OrderController {
         return orderService.placeOrder(orderRequest, userId);
     }
 
-    private Long extractUserId(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-        return user.getId();
-    }
-
     @Operation(
             summary = "Get order history",
             description = "Retrieves all past orders of the current user."
@@ -93,5 +88,10 @@ public class OrderController {
         Long userId = extractUserId(authentication);
         return orderService.updateOrderStatus(orderId, statusUpdateDto.status(),
                 userId);
+    }
+
+    private Long extractUserId(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        return user.getId();
     }
 }
