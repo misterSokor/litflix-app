@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 06-create-books_categories-table
-      author: peter sokor
+      author: Peter Sokor
       changes:
         - createTable:
             tableName: books_categories

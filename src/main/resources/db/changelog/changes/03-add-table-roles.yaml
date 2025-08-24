@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 03-add-table-roles
-      author: peter sokor
+      author: Peter Sokor
       changes:
         - createTable:
             tableName: roles
