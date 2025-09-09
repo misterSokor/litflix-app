@@ -1,3 +1,5 @@
+#docker-compose.yml
+
 version: "3.8"
 services:
   db:
@@ -6,7 +8,7 @@ services:
     platform: linux/amd64
     restart: unless-stopped
     ports:
-      - "3307:3306"
+      - "${MYSQLDB_LOCAL_PORT}:${MYSQLDB_DOCKER_PORT}"
     env_file:
       - ./.env
     environment:

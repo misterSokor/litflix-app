@@ -1,5 +1,20 @@
-FROM openjdk:17-jdk-slim
-WORKDIR /app
-COPY target/litflix-0.0.1-SNAPSHOT.jar app.jar
-EXPOSE 8080 5005
-ENTRYPOINT ["java", "-jar", "app.jar"]
+#Dockerfile
+
+# Builder stage
+FROM openjdk:17-jdk-alpine AS builder
+WORKDIR /application
+ARG JAR_FILE=target/litflix-0.0.1-SNAPSHOT.jar
+COPY ${JAR_FILE} application.jar
+RUN java -Djarmode=layertools -jar application.jar extract
+
+# Final stage
+FROM openjdk:17-jdk-alpine
+WORKDIR /application
+ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75.0"
+COPY --from=builder /application/dependencies/ ./
+COPY --from=builder /application/snapshot-dependencies/ ./
+COPY --from=builder /application/spring-boot-loader/ ./
+COPY --from=builder /application/application/ ./
+EXPOSE 8080
+
+ENTRYPOINT ["java","org.springframework.boot.loader.launch.JarLauncher"]
