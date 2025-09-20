@@ -41,16 +41,12 @@ services:
     env_file:
       - ./.env
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/${MYSQLDB_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:${MYSQLDB_DOCKER_PORT}/${MYSQLDB_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
       SPRING_DATASOURCE_USERNAME: ${MYSQLDB_USER}
       SPRING_DATASOURCE_PASSWORD: ${MYSQLDB_PASSWORD}
-      SPRING_JPA_HIBERNATE_DDL_AUTO: none
-      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
-      SPRING_LIQUIBASE_ENABLED: "true"
-      SPRING_LIQUIBASE_CHANGE_LOG: classpath:db/changelog/db.changelog-master.yaml
-      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y suspend=n,address=*:${DEBUG_PORT}"
     ports:
-      - "8088:8080"
-      - "5005:5005"
+      - "${SPRING_LOCAL_PORT}:${SPRING_DOCKER_PORT}"
+      - "${DEBUG_PORT}:${DEBUG_PORT}"
 volumes:
   mysql-data:
